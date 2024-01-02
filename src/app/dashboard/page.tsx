@@ -1,10 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import session from "@/lib/supabase/get-session";
-import { toast } from "sonner";
+import Navbar from "@/components/navbar";
+import Sidebar from "@/components/sidebar";
+import TaskColumnContainer from "@/components/task-column-container";
 
 export default function Dashboard() {
 
@@ -27,39 +28,19 @@ export default function Dashboard() {
     getUserSession()
   },[])
 
-  const handleSignOut = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/auth/sign-out", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json"
-        }
-      })
-  
-      if(!response.ok) {
-        console.log("error")
-      } else {
-        router.replace("/")
-      }
-    } catch (error: any) {
-      toast("Something went wrong", {
-        description: error.message,
-        cancel: {
-          label: "x"
-        }
-      })
-    } finally {
-      setLoading(false);
-    }
+  if(isLoading) {
+    return (
+      <div>Loading...</div>
+    )
   }
 
   return (
     <main>
-      Dashboards
-      <Button disabled={isLoading} onClick={handleSignOut}>
-        Sign out
-      </Button>
+      <Navbar />
+      <div className="flex">
+        <Sidebar />
+        <TaskColumnContainer />
+      </div>
     </main>
   )
 }
