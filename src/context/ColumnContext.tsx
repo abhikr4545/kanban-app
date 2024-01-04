@@ -2,27 +2,23 @@
 
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState, useEffect } from "react";
 import { useBoardContext } from "./BoardContext";
+import { Column } from "@/types";
 
 interface ColumnProviderProps {
   children: ReactNode
 }
 
-interface Columns {
-  id: string;
-  name: string;
-}
-
 interface ColumnContextType {
-  columns: Columns[] | null;
+  columns: Column[] | null;
   isLoading: boolean | null;
-  setColumns: Dispatch<SetStateAction<Columns[]>>;
+  setColumns: Dispatch<SetStateAction<Column[]>>;
 }
 
 const ColumnContext = createContext<ColumnContextType | undefined>(undefined);
 
 const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
 
-  const [columns, setColumns] = useState<Columns[]>([]);
+  const [columns, setColumns] = useState<Column[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { currentBoardId }  = useBoardContext();
 

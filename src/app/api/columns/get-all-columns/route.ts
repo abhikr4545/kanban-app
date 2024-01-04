@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   const  { currentBoardId } = await request.json();
   const supabase = await SupabaseServerClient();
 
-  const { data, error } = await supabase.from("task_column").select("id, name").eq("board_id", currentBoardId);
+  const { data, error } = await supabase.from("task_column").select("id, name, position").eq("board_id", currentBoardId);
 
   if(error) {
     return NextResponse.json({ message: "Somethhing went wrong" }, { status: 401 })

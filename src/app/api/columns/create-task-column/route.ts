@@ -3,7 +3,7 @@ import SupabaseServerClient from "@/lib/supabase";
 import { nanoid } from "nanoid";
 
 export async function POST(request: NextRequest) {
-  const { taskContainerName, boardId } = await request.json();
+  const { taskContainerName, boardId, position } = await request.json();
   const supabase = await SupabaseServerClient();
   try {
     const { data: existingColumn, error: existingColumnError } = await supabase.from("task_column").select()
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { data, error } = await supabase.from("task_column")
-    .insert({ id: nanoid(), name: taskContainerName, board_id: boardId }).select()
+    .insert({ id: nanoid(), name: taskContainerName, board_id: boardId, position: position }).select()
     
     if(error) {
       return NextResponse.json({ message: "Oops something went wrong!" }, { status: 400 });

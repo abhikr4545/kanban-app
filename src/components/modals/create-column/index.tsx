@@ -31,7 +31,7 @@ export default function CreateTaskColumnModal() {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { currentBoardId } = useBoardContext()
-  const { setColumns } = useColumnContext()
+  const { columns, setColumns } = useColumnContext()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,7 +49,8 @@ export default function CreateTaskColumnModal() {
         },
         body: JSON.stringify({
           taskContainerName: values.taskContainerName,
-          boardId: currentBoardId
+          boardId: currentBoardId,
+          position: columns?.length
         })
       })
 
@@ -61,7 +62,7 @@ export default function CreateTaskColumnModal() {
           }
         })
       } else {
-        setColumns((prev: Column[]) => [...prev, { id: data.data[0].id, name: data.data[0].name }])
+        setColumns((prev: Column[]) => [...prev, { id: data.data[0].id, name: data.data[0].name, position: columns?.length }])
         toast( "Board Column Created",{
           cancel: {
             label: "x"
