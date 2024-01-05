@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import { BoardProvider } from '@/context/BoardContext'
 import { ColumnProvider } from '@/context/ColumnContext'
+import { TaskProvider } from '@/context/TaskContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,12 +21,14 @@ export default function RootLayout({
   return (
     <BoardProvider>
       <ColumnProvider>
+      <TaskProvider>
         <html lang="en">
           <body className={inter.className}>
             {children}
-            <Toaster />
-          </body>
-        </html>
+              <Toaster />
+            </body>
+          </html>
+        </TaskProvider>
       </ColumnProvider>
     </BoardProvider>
   )

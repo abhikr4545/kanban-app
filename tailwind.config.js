@@ -57,7 +57,8 @@ module.exports = {
         "pearl": "hsl(0, 0%, 98.4%)",
         "bleu-de-france": "hsla(211, 71%, 53%, 1)",
         "gunmetal": "hsla(227, 15%, 24%, 1)",
-        "smoke-white": "#F5F5F5"
+        "smoke-white": "#F5F5F5",
+        "dove-gray": "hsl(210, 10%, 65%)"
       },
       borderRadius: {
         lg: "var(--radius)",

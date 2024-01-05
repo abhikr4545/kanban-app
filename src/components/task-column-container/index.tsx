@@ -12,6 +12,7 @@ export default function TaskColumnContainer () {
 
   const { currentBoardId } = useBoardContext();
   const { columns, setColumns } = useColumnContext();
+  
 
   if(!currentBoardId) {
     return (
@@ -22,7 +23,7 @@ export default function TaskColumnContainer () {
   }
 
   const handleDragEnd = async (result: DropResult) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, type } = result;
 
     if (!destination) {
       return;
@@ -35,12 +36,16 @@ export default function TaskColumnContainer () {
       return;
     }
 
-    const column = columns?.find((col) => col.id === draggableId);
     const newColumns = Array.from(columns!);
-    newColumns.splice(source.index, 1);
-    newColumns.splice(destination.index, 0, column!);
+    const [removedColumn] = newColumns.splice(source.index, 1);
+    newColumns.splice(destination.index, 0, removedColumn);
 
-    setColumns(newColumns);
+    const updatedColumns = newColumns.map((column, index) => ({
+      ...column,
+      position: index
+    }));
+  
+    setColumns(updatedColumns);
 
     try {
       const response = await fetch(`/api/columns/update-task-column`, {
@@ -50,7 +55,7 @@ export default function TaskColumnContainer () {
         },
         body: JSON.stringify({
           currentBoardId,
-          columns: newColumns.map((column, index) => ({
+          columns: updatedColumns.map((column, index) => ({
             id: column.id,
             position: index
           }))

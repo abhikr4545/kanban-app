@@ -19,8 +19,9 @@ import {
 import { IoAdd } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { nanoid } from "nanoid";
-// import { useColumnContext } from "@/context/ColumnContext";
-// import { useBoardContext } from "@/context/BoardContext";
+import { useColumnContext } from "@/context/ColumnContext";
+import { useBoardContext } from "@/context/BoardContext";
+import { useTaskContext } from "@/context/TaskContext";
 
 const formSchema = z.object({
   taskTitle: z.string().min(1, {
@@ -51,8 +52,9 @@ export default function CreateTaskModal() {
   const [open, setOpen] = useState<boolean>(false);
   const [subTasksList, setSubtasksList] = useState<Subtasks[]>([]);
   const [subTaskError, setSubTaskError] = useState<boolean>(false);
-  // const { currentBoardId, setTasksList } = useBoardContext()
-  // const { columns } = useColumnContext()
+  const { currentBoardId } = useBoardContext()
+  const { setTasks } = useTaskContext()
+  const { columns } = useColumnContext()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,42 +66,46 @@ export default function CreateTaskModal() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // if(!(subTasksList.every((task) => task.title !== ""))) {
-    //   setSubTaskError(true);
-    //   return;
-    // }
+    if(!(subTasksList.every((task) => task.title !== ""))) {
+      setSubTaskError(true);
+      return;
+    }
 
-    // const response = await fetch("/api/tasks/create-task", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     taskTitle: values.taskTitle,
-    //     taskDescription: values.taskDescription,
-    //     column: values.column,
-    //     subTasksList: subTasksList,
-    //     currentBoardId
-    //   })
-    // })
+    const response = await fetch("/api/tasks/create-task", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        taskTitle: values.taskTitle,
+        taskDescription: values.taskDescription,
+        column: values.column,
+        subTasksList: subTasksList,
+        currentBoardId
+      })
+    })
 
-    // const data = await response.json();
-    
-    // if(!response.ok) {
-    //   toast({
-    //     title: "You request could not be completed"
-    //   })
-    // } else {
-    //   setTasksList((prev: any[]) => [...prev, { ...data.data[0] }])
-    //   toast({
-    //     title: "Task created successfully"
-    //   })
-    // }
+    const data = await response.json();
 
-    // form.reset()
-    // setSubTaskError(false);
-    // setSubtasksList([])
-    // setOpen(false)
+    if(!response.ok) {
+      toast( "You request could not be completed",{
+        cancel: {
+          label: "x"
+        }
+      })
+    } else {
+      setTasks((prev: any[]) => [...prev, { ...data.data[0] }])
+      toast("Task created successfully",{
+        cancel: {
+          label: "x"
+        }
+      })
+    }
+
+    form.reset()
+    setSubTaskError(false);
+    setSubtasksList([])
+    setOpen(false)
   }
 
   const handleSubtaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,7 +186,7 @@ export default function CreateTaskModal() {
                 <div className="flex-1">
                   <Input 
                     id="task-description"
-                    className="text-white resize-none outline-gray-600 ring-gray-600 bg-main-background focus:outline-none focus:ring-0 mb-4"
+                    className="text-white bg-gunmetal resize-none outline-gray-600 ring-gray-600 focus:outline-none focus:ring-0 mb-4"
                     placeholder="e.g. Do your task"
                     onChange={handleSubtaskChange}
                     name={subTask.id}
@@ -207,11 +213,11 @@ export default function CreateTaskModal() {
                         <SelectValue placeholder="Columns" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-main-background text-white">
+                    <SelectContent className="bg-gunmetal text-white">
                       {
-                        // columns?.map((column: Columns) => (
-                        //   <SelectItem key={column.id} value={column.id}>{column.name}</SelectItem>
-                        // ))
+                        columns?.map((column: Columns) => (
+                          <SelectItem key={column.id} value={column.id}>{column.name}</SelectItem>
+                        ))
                       }
                     </SelectContent>
                   </Select>

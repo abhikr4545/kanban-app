@@ -9,3 +9,9 @@ export interface Column {
   name: string;
   position: number;
 }
+
+export interface Task {
+  id: string;
+  name: string;
+  position: number;
+}
