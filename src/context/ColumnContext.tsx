@@ -2,7 +2,7 @@
 
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState, useEffect } from "react";
 import { useBoardContext } from "./BoardContext";
-import { Column } from "@/types";
+import { Column, Task } from "@/types";
 
 interface ColumnProviderProps {
   children: ReactNode
@@ -11,7 +11,8 @@ interface ColumnProviderProps {
 interface ColumnContextType {
   columns: Column[] | null;
   isLoading: boolean | null;
-  setColumns: Dispatch<SetStateAction<Column[]>>;
+  setColumns: Dispatch<SetStateAction<Column[] | any>>;
+  updateTasks: any
 }
 
 const ColumnContext = createContext<ColumnContextType | undefined>(undefined);
@@ -19,6 +20,7 @@ const ColumnContext = createContext<ColumnContextType | undefined>(undefined);
 const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
 
   const [columns, setColumns] = useState<Column[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { currentBoardId }  = useBoardContext();
 
@@ -35,9 +37,31 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
             currentBoardId
           })
         })
-          const data = await response.json()
-          setColumns(data.data);
-        } catch (error) {
+        const data = await response.json();
+        
+        // Fetch all tasks
+        const taskResponse = await fetch("/api/tasks/get-all-tasks", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify({
+            currentBoardId
+          })
+        });
+        
+        const taskData = await taskResponse.json();
+        
+        // Add tasks to each column
+        const columnsWithTasks = data.data.map((column: any) => {
+          return {
+            ...column,
+            tasks: taskData.data.filter((task: any) => task.task_column_id === column.id)
+          };
+        });
+        
+        setColumns(columnsWithTasks);
+      } catch (error) {
           console.log(error)
       } finally {
         setIsLoading(false);
@@ -47,8 +71,26 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
     getAllColumns()
   },[currentBoardId])
 
+  const updateTasks = (data: any) => {
+    console.log("from column context ->", data)
+
+    setColumns((prev: any[]) => {
+      return prev.map(column => {
+        if(column.id === data.task_column_id) {
+          return {
+            ...column,
+            tasks: [...column.tasks, { ...data }]
+          }
+        } else {
+          return column;
+        }
+      })
+    })
+
+  }
+
   return (
-    <ColumnContext.Provider value={{ columns, isLoading, setColumns }}>
+    <ColumnContext.Provider value={{ columns, isLoading, setColumns, updateTasks }}>
       {children}
     </ColumnContext.Provider>
   )

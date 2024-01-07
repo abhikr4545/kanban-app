@@ -3,12 +3,12 @@ import SupabaseServerClient from "@/lib/supabase";
 import { nanoid } from "nanoid";
 
 export async function POST(request: NextRequest) {
-  const { taskTitle, taskDescription, column, subTasksList, currentBoardId } = await request.json();
+  const { taskTitle, taskDescription, column, subTasksList, currentBoardId, position } = await request.json();
   const supabase = await SupabaseServerClient()
   const taskId = nanoid();
 
   const { data, error } = await supabase.from("task_card")
-  .insert({ id: taskId, task_column_id: column, task_name: taskTitle, task_description: taskDescription, board_id: currentBoardId }).select();
+  .insert({ id: taskId, task_column_id: column, task_name: taskTitle, task_description: taskDescription, board_id: currentBoardId, position }).select();
 
   const subTasksWithCardId = subTasksList.map((subTask: any) => ({id: subTask.id , name: subTask.title, task_card_id: taskId}))
 

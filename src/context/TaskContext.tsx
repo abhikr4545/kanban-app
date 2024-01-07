@@ -35,6 +35,7 @@ const TaskProvider = ({ children }: TaskProviderProps) => {
           })
         });
 
+        
         if(response.ok) {
           const data = await response.json()
           setTasks(data.data)
@@ -43,6 +44,8 @@ const TaskProvider = ({ children }: TaskProviderProps) => {
         console.log(error)
       }
     }
+
+
     getAllTasks()
   }, [currentBoardId])
 

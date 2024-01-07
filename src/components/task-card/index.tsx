@@ -1,20 +1,28 @@
 "use client";
 
+import { Draggable } from "@hello-pangea/dnd";
 import ViewTaskModal from "../modals/view-task";
 
 interface Task {
   task_name: string;
   task_description: string;
   id: string;
+  position: number;
 }
 
-export default function TaskCard({ task_name, task_description, id }:Task) {
+export default function TaskCard({ task_name, task_description, id, position }:Task) {
   return (
-    <article className="bg-dove-gray rounded-lg h-36 overflow-y-auto mt-3">
-      <ViewTaskModal taskName={task_name} taskDescription={task_description} id={id} />
-      <p className="ml-4 text-gray-500">
-        0 of 1 subtasks
-      </p>
-    </article>
+    <Draggable draggableId={id} index={position}>
+    {(provided) => (
+        <article className="bg-dove-gray rounded-lg h-36 overflow-y-auto mt-3" {...provided.dragHandleProps} {...provided.draggableProps}
+          ref={provided.innerRef}
+        >
+        <ViewTaskModal taskName={task_name} taskDescription={task_description} id={id} />
+        <p className="ml-4 text-gray-500">
+          0 of 1 subtasks
+        </p>
+      </article>
+    )}
+    </Draggable>
   )
 }

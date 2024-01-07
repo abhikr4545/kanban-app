@@ -21,7 +21,6 @@ import { IoMdClose } from "react-icons/io";
 import { nanoid } from "nanoid";
 import { useColumnContext } from "@/context/ColumnContext";
 import { useBoardContext } from "@/context/BoardContext";
-import { useTaskContext } from "@/context/TaskContext";
 
 const formSchema = z.object({
   taskTitle: z.string().min(1, {
@@ -53,8 +52,7 @@ export default function CreateTaskModal() {
   const [subTasksList, setSubtasksList] = useState<Subtasks[]>([]);
   const [subTaskError, setSubTaskError] = useState<boolean>(false);
   const { currentBoardId } = useBoardContext()
-  const { setTasks } = useTaskContext()
-  const { columns } = useColumnContext()
+  const { columns, updateTasks } = useColumnContext()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,6 +69,8 @@ export default function CreateTaskModal() {
       return;
     }
 
+    const currentPosition = columns?.filter((column: any) => column.id === values.column)[0].tasks.length
+    
     const response = await fetch("/api/tasks/create-task", {
       method: "POST",
       headers: {
@@ -81,7 +81,8 @@ export default function CreateTaskModal() {
         taskDescription: values.taskDescription,
         column: values.column,
         subTasksList: subTasksList,
-        currentBoardId
+        currentBoardId,
+        position: currentPosition
       })
     })
 
@@ -94,7 +95,7 @@ export default function CreateTaskModal() {
         }
       })
     } else {
-      setTasks((prev: any[]) => [...prev, { ...data.data[0] }])
+      updateTasks(data.data[0])
       toast("Task created successfully",{
         cancel: {
           label: "x"

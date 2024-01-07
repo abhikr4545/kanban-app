@@ -6,14 +6,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBoardContext } from "@/context/BoardContext";
 import CreateTaskModal from "../modals/create-task";
-// import { useColumnContext } from "@/context/ColumnContext";
+import { useColumnContext } from "@/context/ColumnContext";
 
 export default function Navbar() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter()
   const { currentBoardName, currentBoardId } = useBoardContext();
-  // const { columns } = useColumnContext();
+  const { columns } = useColumnContext();
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -52,8 +52,7 @@ export default function Navbar() {
           {currentBoardName || "Select a board"}
         </div>
         <div className="flex items-center gap-4">
-          {/* {(currentBoardId && columns.length > 0) ? <CreateTaskModal /> : <div></div>} */}
-          <CreateTaskModal />
+          {(currentBoardId && columns?.length! > 0) ? <CreateTaskModal /> : <div></div>}
           <Button disabled={loading} onClick={handleSignOut}>Sign out</Button>
         </div>
       </div>

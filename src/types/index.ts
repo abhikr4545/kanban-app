@@ -8,6 +8,7 @@ export interface Column {
   id: string;
   name: string;
   position: number;
+  tasks: any[]
 }
 
 export interface Task {

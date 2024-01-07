@@ -62,7 +62,7 @@ export default function CreateTaskColumnModal() {
           }
         })
       } else {
-        setColumns((prev: Column[]) => [...prev, { id: data.data[0].id, name: data.data[0].name, position: columns?.length }])
+        setColumns((prev: Column[]) => [...prev, { id: data.data[0].id, name: data.data[0].name, position: columns?.length, tasks:[] }])
         toast( "Board Column Created",{
           cancel: {
             label: "x"
