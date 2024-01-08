@@ -2,7 +2,7 @@
 
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState, useEffect } from "react";
 import { useBoardContext } from "./BoardContext";
-import { Column, Task } from "@/types";
+import { Column } from "@/types";
 
 interface ColumnProviderProps {
   children: ReactNode
@@ -12,7 +12,8 @@ interface ColumnContextType {
   columns: Column[] | null;
   isLoading: boolean | null;
   setColumns: Dispatch<SetStateAction<Column[] | any>>;
-  updateTasks: any
+  updateTasks: any;
+  deleteColumn: any;
 }
 
 const ColumnContext = createContext<ColumnContextType | undefined>(undefined);
@@ -20,7 +21,6 @@ const ColumnContext = createContext<ColumnContextType | undefined>(undefined);
 const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
 
   const [columns, setColumns] = useState<Column[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { currentBoardId }  = useBoardContext();
 
@@ -90,11 +90,15 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
         }
       })
     })
+  }
 
+  const deleteColumn = (id: string) => {
+    const filteredColumns = columns?.filter((column: Column) => column.id !== id);
+    setColumns(filteredColumns)
   }
 
   return (
-    <ColumnContext.Provider value={{ columns, isLoading, setColumns, updateTasks }}>
+    <ColumnContext.Provider value={{ columns, isLoading, setColumns, updateTasks, deleteColumn }}>
       {children}
     </ColumnContext.Provider>
   )
