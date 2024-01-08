@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ data }, { status: 201 })
     }
   } catch(error) {
-    console.log("Catch error", error)
     return NextResponse.json({ message: "Server cannot process your request. Please try after sometime." }, { status: 500 });
   }
 }

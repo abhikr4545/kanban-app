@@ -98,7 +98,6 @@ export default function SignIn() {
   const handleSignInWithGithub = async () => {
     setIsLoading(true)
     try {
-      console.log(isLoading)
       const supabase = SupabaseBrowserClient();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "github",
@@ -113,7 +112,6 @@ export default function SignIn() {
       }
       
     } catch(error) {
-      console.log(isLoading, "From catch block")
     } finally {
       setIsLoading(false);
     }

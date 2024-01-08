@@ -9,7 +9,6 @@ export async function PATCH(request: NextRequest) {
     const { error } = await supabase.from("task_column").update({ position: column.position }).eq("id", column.id).select();
 
     if(error) {
-      console.log(error)
       return NextResponse.json({ message: "Something went wrong" }, { status: 404 })
     }
   }

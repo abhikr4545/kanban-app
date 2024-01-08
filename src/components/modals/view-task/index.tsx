@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger
 } from "@/components/ui/dialog";
@@ -81,14 +81,12 @@ export default function ViewTaskModal({ taskName, taskDescription, id }: ViewTas
       })
 
     } catch(error) {
-      console.log(error);
       toast("Something went wrong",{
         cancel: {
           label: "x"
         }
       })
     }
-
     setOpen(false);
   }
 

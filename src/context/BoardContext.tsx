@@ -9,6 +9,7 @@ interface BoardContextProps {
   setBoardList: Dispatch<SetStateAction<Board[]>>;
   handleChangeActiveBoard: (id: string) => void;
   currentBoardId: string | null | undefined;
+  loading: boolean;
 }
 
 interface BoardProviderProps {
@@ -19,12 +20,14 @@ const BoardContext = createContext<BoardContextProps | undefined>(undefined);
 
 const BoardProvider = ({ children }: BoardProviderProps) => {
   const [boardList, setBoardList] = useState<Board[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentBoardId, setCurrentBoardId] = useState<string | null>();
   const [currentBoardName, setCurrentBoardName] = useState<string | null>()
 
 
   useEffect(() => {
     const getAllBoards = async () => {
+      setLoading(true)
       const response = await fetch("api/board/get-all-boards");
       const data = await response.json();
       const boards: Board[] = data?.data.map((board: any) => ({
@@ -33,9 +36,11 @@ const BoardProvider = ({ children }: BoardProviderProps) => {
         active: false,
       }));
       setBoardList(boards);
+      setLoading(false);
     }
+    
     getAllBoards()
-  }, [currentBoardId])
+  }, [])
 
   const handleChangeActiveBoard = (id: string) => {
     const indexToChange = boardList.findIndex((board: Board) => board.id === id);
@@ -46,7 +51,7 @@ const BoardProvider = ({ children }: BoardProviderProps) => {
 
   return (
     <BoardContext.Provider value={{ 
-      boardList, setBoardList, currentBoardName, currentBoardId, handleChangeActiveBoard
+      boardList, setBoardList, currentBoardName, currentBoardId, handleChangeActiveBoard, loading
     }}>
       {children}
     </BoardContext.Provider>

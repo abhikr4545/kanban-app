@@ -26,6 +26,11 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const getAllColumns = async () => {
+
+      if(!currentBoardId) {
+        return;
+      }
+
       try {
         setIsLoading(true);
         const response = await fetch(`/api/columns/get-all-columns`, {
@@ -72,7 +77,6 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
   },[currentBoardId])
 
   const updateTasks = (data: any) => {
-    console.log("from column context ->", data)
 
     setColumns((prev: any[]) => {
       return prev.map(column => {

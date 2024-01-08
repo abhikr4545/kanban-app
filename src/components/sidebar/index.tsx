@@ -1,4 +1,4 @@
-import { useBoardContext } from "@/context/BoardContext"
+import { useBoardContext } from "@/context/BoardContext";
 import BoardListContainer from "../board-list-container";
 import CreateBoardModal from "../modals/create-board-modal";
 

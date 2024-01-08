@@ -1,7 +1,6 @@
 import { Column, Task } from "@/types";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import TaskCard from "../task-card";
-import { useEffect } from "react";
 
 export default function TaskColumn({ id: columnId, name: columnName, position, tasks }: any) {
 
@@ -15,7 +14,7 @@ export default function TaskColumn({ id: columnId, name: columnName, position, t
           <Droppable droppableId={columnId}>
           {(provided) => (
             <div
-              className="px-4 h-[718px]"
+              className="px-4 h-[718px] overflow-y-auto py-2"
               {...provided.droppableProps} ref={provided.innerRef}
             >
               {

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useBoardContext } from "@/context/BoardContext";
 import CreateTaskModal from "../modals/create-task";
 import { useColumnContext } from "@/context/ColumnContext";
+import { toast } from "sonner";
 
 export default function Navbar() {
 
@@ -26,12 +27,20 @@ export default function Navbar() {
       })
   
       if(!response.ok) {
-        console.log("error")
+        toast("Cannot sign out please try again", {
+          cancel: {
+            label: "x"
+          }
+        })
       } else {
         router.replace("/")
       }
     } catch (error) {
-      console.log(error)
+      toast("Server has some issues", {
+        cancel: {
+          label: "x"
+        }
+      })
     } finally {
       setLoading(false);
     }

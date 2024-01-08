@@ -17,8 +17,6 @@ export async function PATCH(request: NextRequest) {
   }
 
   if(type === "DIFFERENT_COLUMN") {
-    console.log("Start column ->", newStartColumnTasks);
-    console.log("End Column ->", newEndColumnTasks)
 
     for(const task of newStartColumnTasks) {
       const { error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id).select()

@@ -13,7 +13,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ data, message: "Success" }, { status: 201 })
   } catch(error) {
-    console.log(error)
     return NextResponse.json({ message: "Your request cannot be completed" }, { status: 501 })
   }
 }
@@ -21,8 +20,6 @@ export async function POST(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   const { changes } = await request.json();
   const supabase = await SupabaseServerClient()
-
-  console.log("from server ->", changes);
   
   for(const change of changes) {
     try {
@@ -33,8 +30,7 @@ export async function PATCH(request: NextRequest) {
       }
 
     } catch (error) {
-      console.log(error);
-      return NextResponse.json({ message: "Cannot complete your request at this moment" }, { status: 400 })
+      return NextResponse.json({ message: "Cannot complete your request at this moment" }, { status: 500 })
     }
   }
 

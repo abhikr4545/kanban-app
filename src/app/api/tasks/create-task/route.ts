@@ -16,8 +16,6 @@ export async function POST(request: NextRequest) {
   .upsert([...subTasksWithCardId]).select();
 
   if(error) {
-    console.log(error)
-    console.log(subtasksError);
     return NextResponse.json({ message: "Something went wrong" }, { status: 401 })
   }
 

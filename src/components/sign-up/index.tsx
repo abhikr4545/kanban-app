@@ -71,7 +71,6 @@ export default function SignUp() {
 
       if (!response.ok) {
         const data = await response.json();
-        console.log(data)
         toast("Uh oh! Something went wrong",{
           description: data?.error.message,
           cancel: {
@@ -94,7 +93,6 @@ export default function SignUp() {
           label: "x"
         }
       })
-      console.log(error)
     } finally {
       setIsLoading(false)
     }

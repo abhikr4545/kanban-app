@@ -7,10 +7,15 @@ import { useColumnContext } from "@/context/ColumnContext";
 import { Column } from "@/types";
 import TaskColumn from "../task-column";
 import { toast } from "sonner";
+import Loader from "./loading";
 export default function TaskColumnContainer () {
 
   const { currentBoardId } = useBoardContext();
-  const { columns, setColumns } = useColumnContext();
+  const { columns, setColumns, isLoading } = useColumnContext();
+
+  if(isLoading) {
+    return <Loader />
+  }
 
   if(!currentBoardId) {
     return (
@@ -100,8 +105,6 @@ export default function TaskColumnContainer () {
                   return column;
                 }
               });
-
-              console.log(newColumn);
         
             if(newColumns) {
               setColumns(newColumns);
@@ -119,9 +122,13 @@ export default function TaskColumnContainer () {
               })
             })
             const data = await response.json();
-            console.log(data);
+            
           } catch (error) {
-            console.log(error);
+            toast("Something went wrong", {
+              cancel: {
+                label: "x"
+              }
+            })
           }
         } else {
           const newStartColumnTasks = startColumn.tasks?.filter(task => task.id !== result.draggableId);
@@ -165,9 +172,13 @@ export default function TaskColumnContainer () {
               })
             })
             const data = await response.json();
-            console.log(data);
+            
           } catch (error) {
-            console.log(error);
+            toast("Something went wrong", {
+              cancel: {
+                label: "x"
+              }
+            })
           }
         }}}
     }

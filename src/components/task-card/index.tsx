@@ -18,9 +18,6 @@ export default function TaskCard({ task_name, task_description, id, position }:T
           ref={provided.innerRef}
         >
         <ViewTaskModal taskName={task_name} taskDescription={task_description} id={id} />
-        <p className="ml-4 text-gray-500">
-          0 of 1 subtasks
-        </p>
       </article>
     )}
     </Draggable>
