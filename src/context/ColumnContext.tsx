@@ -13,7 +13,6 @@ interface ColumnContextType {
   isLoading: boolean | null;
   setColumns: Dispatch<SetStateAction<Column[] | any>>;
   updateTasks: any;
-  deleteColumn: any;
 }
 
 const ColumnContext = createContext<ColumnContextType | undefined>(undefined);
@@ -77,7 +76,6 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
   },[currentBoardId])
 
   const updateTasks = (data: any) => {
-
     setColumns((prev: any[]) => {
       return prev.map(column => {
         if(column.id === data.task_column_id) {
@@ -92,13 +90,8 @@ const ColumnProvider: React.FC<ColumnProviderProps> = ({ children }) => {
     })
   }
 
-  const deleteColumn = (id: string) => {
-    const filteredColumns = columns?.filter((column: Column) => column.id !== id);
-    setColumns(filteredColumns)
-  }
-
   return (
-    <ColumnContext.Provider value={{ columns, isLoading, setColumns, updateTasks, deleteColumn }}>
+    <ColumnContext.Provider value={{ columns, isLoading, setColumns, updateTasks }}>
       {children}
     </ColumnContext.Provider>
   )

@@ -18,13 +18,11 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabase.from("task_column").delete().eq("id", columnId);
 
     if(error) {
-      console.log("Try Error -> ", error)
       return NextResponse.json({ message: "There was some error" }, { status: 404 });
     }
 
     return NextResponse.json({ message: "Deleted Successfully" }, { status: 201 });
   } catch(error) {
-    console.log(error)
     return NextResponse.json({ message: "There was some error" }, { status: 500 });
   }
 }

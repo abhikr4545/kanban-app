@@ -8,7 +8,7 @@ export async function PATCH(request: NextRequest) {
 
   if(type === "SAME_COLUMN") {
     for(const task of newColumnTasks) {
-      const { data, error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id).select()
+      const { error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id)
 
       if(error) {
         return NextResponse.json({ message: "Something went wrong changes will be reverted on next refresh" }, { status: 404 });
@@ -19,7 +19,7 @@ export async function PATCH(request: NextRequest) {
   if(type === "DIFFERENT_COLUMN") {
 
     for(const task of newStartColumnTasks) {
-      const { error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id).select()
+      const { error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id)
 
       if(error) {
         return NextResponse.json({ message: "Something went wrong changes will be reverted on next refresh" }, { status: 404 });
@@ -27,7 +27,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     for(const task of newEndColumnTasks) {
-      const { error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id).select()
+      const { error } = await supabase.from("task_card").update({ task_column_id: task.task_column_id, position: task.position }).eq("id", task.id)
 
       if(error) {
         return NextResponse.json({ message: "Something went wrong changes will be reverted on next refresh" }, { status: 404 });

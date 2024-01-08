@@ -5,7 +5,7 @@ import { useState } from "react";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { toast } from "sonner";
 
-export default function ColumnDelete({ columnId }: {columnId: string}) {
+export default function TaskDelete({ taskId, columnId }: { taskId: string, columnId: string }) {
 
   const [open, setOpen] = useState<boolean>(false);
   const { columns, setColumns } = useColumnContext()
@@ -15,52 +15,62 @@ export default function ColumnDelete({ columnId }: {columnId: string}) {
     setOpen(true);
   }
 
-  const handleColumnDelete = async () => {
+  const handleTaskDelete = async () => {
+    const taskColumn = columns?.filter((column: any) => column.id === columnId)[0];
 
-    const filteredColumns = columns?.filter((column: Column) => column.id !== columnId);
+    const filteredTasks = taskColumn?.tasks.filter((task: any) => task.id !== taskId);
 
-    const updatedColumns = filteredColumns?.map((column: Column, index: number) => {
-      return {
-        ...column,
-        position: index
-      }
+    const updatedTasks = filteredTasks?.map((task: any, index: number) => { 
+      return { ...task, position: index }
     })
 
-    setColumns(updatedColumns);
+    setColumns((prev: any[]) => {
+      return prev.map(column => {
+        if(column.id === columnId) {
+          return {
+            ...column,
+            tasks: updatedTasks
+          }
+        } else {
+          return column
+        }
+      })
+    })
 
     try {
-      const response = await fetch("/api/columns/delete-column", {
+      const response = await fetch("/api/tasks/delete-task", {
         method: "DELETE",
         headers: {
           "Content-type": "application/json"
         },
         body: JSON.stringify({
-          columnId, updatedColumns
+          taskId, updatedTasks
         })
       })
 
-      if(response.ok) {
-        toast("Column Deleted", {
+      if(!response.ok) {
+        toast("Something went wrong", {
           cancel: {
             label: "x"
           }
         })
-
       } else {
-        toast("There was some any changes will be reverted on next refresh", {
+        toast("Task deleted", {
           cancel: {
             label: "x"
           }
         })
       }
-    } catch(error) {
-      toast("There was some any changes will be reverted on next refresh", {
+
+    } catch (error) {
+      toast("Something went wrong", {
         cancel: {
           label: "x"
         }
       })
     }
   }
+  
 
   return (
     <AlertDialog>
@@ -76,7 +86,7 @@ export default function ColumnDelete({ columnId }: {columnId: string}) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleColumnDelete}>
+          <AlertDialogAction onClick={handleTaskDelete}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

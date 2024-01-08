@@ -74,7 +74,11 @@ export default function TaskColumnContainer () {
           })
         }
       } catch (error) {
-        console.log(error);
+        toast("Something went wrong. Any changes will not be reflected no next refresh.", {
+          cancel: {
+            label: "x"
+          }
+        })
       }
     }else {
       const startColumn = columns?.find(column => column.id === source.droppableId);

@@ -25,7 +25,7 @@ export default function TaskColumn({ id: columnId, name: columnName, position, t
               {
                 tasks?.map((task: any) => {
                   if(task.task_column_id === columnId) {
-                    return <TaskCard key={task.id} task_name={task.task_name} task_description={task.task_description} id={task.id} position={task.position} />
+                    return <TaskCard key={task.id} task_name={task.task_name} task_description={task.task_description} id={task.id} position={task.position} task_column_id={columnId} />
                   }
                 })
               }

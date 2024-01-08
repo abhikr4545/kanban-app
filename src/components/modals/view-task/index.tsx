@@ -7,6 +7,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import TaskOption from "@/components/task-option";
 
 interface ViewTaskModalProps {
   taskName: string, 
@@ -98,8 +99,9 @@ export default function ViewTaskModal({ taskName, taskDescription, id }: ViewTas
       </p>
       </DialogTrigger>
       <DialogContent className="bg-gunmetal text-white max-h-[800px] overflow-y-hidden">
-        <DialogHeader>
+        <DialogHeader className="flex items-center justify-between">
           <DialogTitle>{taskName}</DialogTitle>
+          <TaskOption />
         </DialogHeader>
         <div className="">
           <p className="text-gray-500 text-sm">{taskDescription}</p>

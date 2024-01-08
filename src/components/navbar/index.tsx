@@ -8,6 +8,7 @@ import { useBoardContext } from "@/context/BoardContext";
 import CreateTaskModal from "../modals/create-task";
 import { useColumnContext } from "@/context/ColumnContext";
 import { toast } from "sonner";
+import TaskOption from "../task-option";
 
 export default function Navbar() {
 
